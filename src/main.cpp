@@ -4,32 +4,30 @@
 #include <string>
 #include <vector>
 
+template <typename T> size_t get_vector_allocation(const std::vector<T> &vec) {
+  return sizeof(decltype(vec.back())) * vec.capacity() + sizeof(vec);
+}
+
 int get_sequence_number() {
   static int counter = 0;
   return counter++;
 }
 
 int main(int argc, char **argv) {
-  std::vector<int> foo;
-  foo.resize(500);
+  std::vector<int> foo(1000);
   std::generate(foo.begin(), foo.end(), get_sequence_number);
   std::vector<int> copy_foo = foo;
+  std::println("Allocated memory: {} bytes",
+               get_vector_allocation(foo) + get_vector_allocation(copy_foo));
   auto res = stream(std::move(foo))
-                 .forEach([](int x) { std::print("{}\t", x); })
+                 .forEach([](int x) { std::print("{} ", x); })
                  .map([](int x) { return x + 1; })
-                 .filter([](int x) { return x % 2 == 0; })
+                 .filter([](int x) { return x % 5 == 0; })
                  .toVector();
   std::println();
-  for (size_t i = 0; i < res.size(); i++) {
-    std::string moved_vector_status = "";
-    try {
-      moved_vector_status = std::to_string(foo.at(i));
-    } catch (std::exception err) {
-      moved_vector_status = "No value";
-    }
-    std::println("New Vector[{0}] = {1}\t Moved Vector[{0}] = {2}\tCopied "
-                 "Vector[{0}] = {3}",
-                 i, res.at(i), moved_vector_status, copy_foo.at(i));
-  }
+  stream(res).forEach([](int x) { std::print("{} ", x); }).discard();
+  std::println("Allocated memory: {} bytes",
+               get_vector_allocation(foo) + get_vector_allocation(copy_foo) +
+                   get_vector_allocation(res));
   return 0;
 }

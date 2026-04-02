@@ -13,7 +13,9 @@ private:
 
 public:
   stream() = delete;
-  stream(std::vector<T> &&_items) : items(std::move(_items)) {}
+  stream(std::vector<T> &&_items) : items(std::move(_items)) {
+    _items.shrink_to_fit();
+  }
   stream(const std::vector<T> &_items) : items(_items) {}
   stream &filter(std::function<bool(const T &b)> compare) {
     items.erase(std::remove_if(items.begin(), items.end(),
@@ -27,9 +29,9 @@ public:
     }
     return *this;
   }
-  stream& forEach(std::function<void(const T &b)> map_func) const {
-    for (auto& t : items) {
-        map_func(t);
+  stream &forEach(std::function<void(const T &b)> map_func) {
+    for (auto &t : items) {
+      map_func(t);
     }
     return *this;
   }
@@ -40,12 +42,14 @@ public:
       return std::nullopt;
     }
   }
-  void discard() const {
-    items.clear();
+  void discard() {
     items.resize(0);
     return;
   }
-  std::vector<T> toVector() { return std::move(items); }
+  std::vector<T> toVector() {
+    items.shrink_to_fit();
+    return std::move(items);
+  }
   static stream<T> fromVector(const std::vector<T> &vec) {
     return stream<T>(vec);
   }
