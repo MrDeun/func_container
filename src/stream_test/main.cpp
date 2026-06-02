@@ -1,7 +1,6 @@
-#include "foo.h"
+#include "../templates/streams.hpp"
 #include <algorithm>
 #include <print>
-#include <string>
 #include <vector>
 
 template <typename T> size_t get_vector_allocation(const std::vector<T> &vec) {
@@ -20,12 +19,14 @@ int main(int argc, char **argv) {
   std::println("Allocated memory: {} bytes",
                get_vector_allocation(foo) + get_vector_allocation(copy_foo));
   auto res = stream(std::move(foo))
-                 .forEach([](int x) { std::print("{} ", x); })
+                 .forEach([](int x) {
+                   // std::print("{} ", x);
+                 })
                  .map([](int x) { return x + 1; })
                  .filter([](int x) { return x % 5 == 0; })
                  .toVector();
   std::println();
-  stream(res).forEach([](int x) { std::print("{} ", x); }).discard();
+  // stream(res).forEach([](int x) { std::print("{} ", x); }).discard();
   std::println("Allocated memory: {} bytes",
                get_vector_allocation(foo) + get_vector_allocation(copy_foo) +
                    get_vector_allocation(res));

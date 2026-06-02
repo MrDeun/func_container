@@ -1,6 +1,6 @@
 [
 {
-  "directory": "/home/mrdeun/Workspace/func_container/func_container",
-  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-DNDEBUG", "-o", "build/.objs/func_container/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
-  "file": "src/main.cpp"
+  "directory": "/home/mrdeun/Workspace/func_container",
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-DNDEBUG", "-o", "build/.objs/stream_example/linux/x86_64/release/src/stream_test/main.cpp.o", "src/stream_test/main.cpp"],
+  "file": "src/stream_test/main.cpp"
 }]
