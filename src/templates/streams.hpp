@@ -44,18 +44,28 @@ public:
       return std::nullopt;
     }
   }
-  void discard() const noexcept {
+  [[nodiscard]] std::optional<T>
+  find_first_if(std::function<bool(const T &value)> func) const noexcept {
+    for (auto &v : items) {
+      if (func(v)) {
+        return v;
+      }
+    }
+
+    return std::nullopt;
+  }
+  void discard() noexcept {
     items.resize(0);
     return;
   }
-  std::vector<T> to_vector() {
+  [[nodiscard]] std::vector<T> to_vector() {
     items.shrink_to_fit();
     return std::move(items);
   }
-  static stream<T> from_vector(const std::vector<T> &vec) {
+  [[nodiscard]] static stream<T> from_vector(const std::vector<T> &vec) {
     return stream<T>(vec);
   }
-  static stream<T> from_vector(std::vector<T> &&vec) {
+  [[nodiscard]] static stream<T> from_vector(std::vector<T> &&vec) {
     return stream<T>(std::move(vec));
   }
 };

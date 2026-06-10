@@ -13,11 +13,9 @@ int get_sequence_number() {
 }
 
 int main(int argc, char **argv) {
-  std::vector<int> foo(1000);
-  std::generate(foo.begin(), foo.end(), get_sequence_number);
-  std::vector<int> copy_foo = foo;
-  std::println("Allocated memory: {} bytes",
-               get_vector_allocation(foo) + get_vector_allocation(copy_foo));
+  std::vector<int> foo(100);
+  std::ranges::generate(foo, get_sequence_number);
+  std::println("Allocated memory: {} bytes", get_vector_allocation(foo));
   auto res = stream(std::move(foo))
                  .for_each([](int x) {
                    // std::print("{} ", x);
@@ -26,9 +24,9 @@ int main(int argc, char **argv) {
                  .filter([](int x) { return x % 5 == 0; })
                  .to_vector();
   std::println();
-  // stream(res).forEach([](int x) { std::print("{} ", x); }).discard();
+  stream(res).for_each([](int x) { std::print("{} ", x); }).discard();
+  std::println("\n");
   std::println("Allocated memory: {} bytes",
-               get_vector_allocation(foo) + get_vector_allocation(copy_foo) +
-                   get_vector_allocation(res));
+               get_vector_allocation(foo) + get_vector_allocation(res));
   return 0;
 }

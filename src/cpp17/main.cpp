@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <utility>
 
-#define STR(char_ptr) std::string(char_ptr)
+using STR = std::string;
 
 void copy_elision() {
   std::function<std::unique_ptr<int>()> factory = []() {
@@ -62,14 +62,16 @@ constexpr void fold_expression() {
                add(1, 2, 4, 5, 6, 7, 8));
   std::println("\t - Add with floats -> add(0.0,4.0,8.0,12.0,16.0) = {}",
                add(0.0, 4.0, 8.0, 12.0, 16.0));
-  std::println("\t - Add with strings -> add(\"hello \",\"comp\",\"time!\")  = {}",
-               add(STR("hello "), STR("comp"), STR("time!")));
+  std::println(
+      "\t - Add with strings -> add(\"hello \",\"comp\",\"time!\")  = {}",
+      add(STR("hello "), STR("comp"), STR("time!")));
 }
 
 void structured_binding() {
   std::pair<uint, float> web{1, 0.0};
   auto [int_, float_] = web;
-  std::println("Left type of the pair '{}' - Right type of the pair '{}'",decltype(int_)(),decltype(float_)());
+  std::println("Left type of the pair '{}' - Right type of the pair '{}'",
+               decltype(int_)(), decltype(float_)());
 }
 
 void if_init_express() {
@@ -80,9 +82,8 @@ void if_init_express() {
 }
 
 int main() {
-  constexpr std::string_view title = "======== C++17 Feature Set ======="; 
-  std::println("{}\n",title);
-
+  constexpr std::string_view title = "======== C++17 Feature Set =======";
+  std::println("{}\n", title);
 
   copy_elision();
   const_support();
@@ -93,9 +94,9 @@ int main() {
   structured_binding();
   if_init_express();
 
-  const std::string footer(title.size(),'=');
+  const std::string footer(title.size(), '=');
 
-  std::println("{}",footer);
+  std::println("{}", footer);
 
   return 0;
 }
