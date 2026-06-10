@@ -19,12 +19,12 @@ int main(int argc, char **argv) {
   std::println("Allocated memory: {} bytes",
                get_vector_allocation(foo) + get_vector_allocation(copy_foo));
   auto res = stream(std::move(foo))
-                 .forEach([](int x) {
+                 .for_each([](int x) {
                    // std::print("{} ", x);
                  })
                  .map([](int x) { return x + 1; })
                  .filter([](int x) { return x % 5 == 0; })
-                 .toVector();
+                 .to_vector();
   std::println();
   // stream(res).forEach([](int x) { std::print("{} ", x); }).discard();
   std::println("Allocated memory: {} bytes",

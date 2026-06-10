@@ -68,10 +68,8 @@ constexpr void fold_expression() {
 
 void structured_binding() {
   std::pair<uint, float> web{1, 0.0};
-
   auto [int_, float_] = web;
-  std::println("Left type of the pair '{}' - Right type of the pair '{}'",
-               typeid(int_).name(), typeid(float_).name());
+  std::println("Left type of the pair '{}' - Right type of the pair '{}'",decltype(int_)(),decltype(float_)());
 }
 
 void if_init_express() {

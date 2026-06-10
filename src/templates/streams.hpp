@@ -13,10 +13,12 @@ private:
 
 public:
   stream() = delete;
-  stream(std::vector<T> &&_items) : items(std::move(_items)) {
-    _items.shrink_to_fit();
-  }
+  stream(std::vector<T> &&_items) : items(std::move(_items)) {};
   stream(const std::vector<T> &_items) : items(_items) {}
+
+  stream &operator=(const stream &_stream) { items = _stream.items; }
+  stream &operator=(stream &&_stream) { items = std::move(_stream.items); }
+
   stream &filter(std::function<bool(const T &b)> compare) {
     items.erase(std::remove_if(items.begin(), items.end(),
                                [&](const T &val) { return !compare(val); }),
@@ -29,31 +31,31 @@ public:
     }
     return *this;
   }
-  stream &forEach(std::function<void(const T &b)> map_func) {
+  stream &for_each(std::function<void(const T &b)> map_func) {
     for (auto &t : items) {
       map_func(t);
     }
     return *this;
   }
-  std::optional<T> findFirst() const {
+  [[nodiscard]] std::optional<T> find_first() const noexcept {
     try {
       return std::optional(items.at(0));
     } catch (std::exception e) {
       return std::nullopt;
     }
   }
-  void discard() {
+  void discard() const noexcept {
     items.resize(0);
     return;
   }
-  std::vector<T> toVector() {
+  std::vector<T> to_vector() {
     items.shrink_to_fit();
     return std::move(items);
   }
-  static stream<T> fromVector(const std::vector<T> &vec) {
+  static stream<T> from_vector(const std::vector<T> &vec) {
     return stream<T>(vec);
   }
-  static stream<T> fromVector(std::vector<T> &&vec) {
+  static stream<T> from_vector(std::vector<T> &&vec) {
     return stream<T>(std::move(vec));
   }
 };
