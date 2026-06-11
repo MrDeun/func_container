@@ -12,15 +12,11 @@
 using STR = std::string;
 
 void copy_elision() {
-  std::function<std::unique_ptr<int>()> factory = []() {
-    return std::make_unique<int>(10);
-  };
+  auto factory = []() { return std::make_unique<int>(10); };
 
-  // This widget will never be moved/copied
+  // This widget will never be copied
   auto widget = factory();
-
-  auto moves_widget = std::move(widget);
-  //   auto copy_widget = widget; // explilictly deleted
+  // auto copy_widget = widget; // explilictly deleted
 }
 
 void const_support() {
@@ -96,7 +92,7 @@ int main() {
 
   const std::string footer(title.size(), '=');
 
-  std::println("{}", footer);
+  std::println("\n{}", footer);
 
   return 0;
 }

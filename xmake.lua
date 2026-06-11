@@ -10,6 +10,9 @@ target("stream_example")
 target("cpp17")
     set_kind("binary")
     add_files("src/cpp17/*.cpp")
+target("cpp20")
+    set_kind("binary")
+    add_files("src/cpp20/*.cpp")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
