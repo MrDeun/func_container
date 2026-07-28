@@ -3,7 +3,9 @@
 #include <algorithm>
 #include <exception>
 #include <functional>
+#include <map>
 #include <optional>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -19,19 +21,19 @@ public:
   stream &operator=(const stream &_stream) { items = _stream.items; }
   stream &operator=(stream &&_stream) { items = std::move(_stream.items); }
 
-  stream &filter(std::function<bool(const T &b)> compare) {
+  [[nodiscard]] stream &filter(std::function<bool(const T &b)> compare) {
     items.erase(std::remove_if(items.begin(), items.end(),
                                [&](const T &val) { return !compare(val); }),
                 items.end());
     return *this;
   }
-  stream &map(std::function<T(const T &b)> map_func) {
+  [[nodiscard]] stream &map(std::function<T(const T &b)> map_func) {
     for (auto &item : items) {
       item = map_func(item);
     }
     return *this;
   }
-  stream &for_each(std::function<void(const T &b)> map_func) {
+  [[nodiscard]] stream &for_each(std::function<void(const T &b)> map_func) {
     for (auto &t : items) {
       map_func(t);
     }
@@ -69,5 +71,8 @@ public:
     return stream<T>(std::move(vec));
   }
 };
-
+template <typename K, typename V>
+stream(std::map<K, V>) -> stream<std::pair<K, V>>;
+template <typename K, typename V>
+stream(std::unordered_map<K, V>) -> stream<std::pair<K, V>>;
 template <typename T> stream(std::vector<T>) -> stream<T>;

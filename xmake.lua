@@ -1,18 +1,15 @@
 add_rules("mode.debug", "mode.release")
 
-set_languages("c++23")
+set_languages("c++17")
+add_requires("fmt")
 
 target("stream_example")
     set_kind("binary")
+    add_packages("fmt")
     add_files("src/stream_test/main.cpp")
 
 
-target("cpp17")
-    set_kind("binary")
-    add_files("src/cpp17/*.cpp")
-target("cpp20")
-    set_kind("binary")
-    add_files("src/cpp20/*.cpp")
+
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
